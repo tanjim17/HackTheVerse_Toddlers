@@ -6,7 +6,7 @@ class Patient(models.Model):
 
     bed = models.OneToOneField(Bed, on_delete=models.DO_NOTHING)
 
-    age = models.IntegerField(unique=True)
+    age = models.IntegerField()
     name = models.CharField(max_length=50)
     gender = models.CharField(max_length=50)
     patientID = models.IntegerField(unique=True)
