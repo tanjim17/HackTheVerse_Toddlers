@@ -11,7 +11,6 @@ class Patient(models.Model):
     gender = models.CharField(max_length=50)
     patientID = models.IntegerField(unique=True)
     admissionDate = models.DateField(null=False)
-    dischargeDate = models.DateField(null=True)
 
     def __str__(self):
         return self.name

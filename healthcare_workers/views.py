@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from patient.models import *
+import datetime
 
 def check_usertype(request):
     if request.user.is_authenticated:
@@ -114,9 +116,27 @@ def dashboard(request):
                 name = request.POST.get('patientname')
                 age = int(request.POST.get('patientage'))
                 gender = request.POST.get('patientgender')
-                
+
+                beds_taken = []
+                patientIDs = []
+                for i in Patient.objects.all():
+                    beds_taken.append(i.bed.bedID)
+                    patientIDs.append(i.patientID)
+                patientIDs.sort(reverse=True)
+
+                available_beds = []
+                for i in Bed.objects.all():
+                    if i.bedID not in beds_taken:
+                        available_beds.append(i.bedID)
+
+                if len(available_beds)>0:
+                    bed = Bed.objects.get(bedID=available_beds[0])
+                    patient = Patient.objects.create(age=age, name=name, gender=gender, admissionDate=datetime.datetime.now(), patientID=patientIDs[0]+1, bed=bed)
+
             elif formIdentity == 'discharge':
-                age = int(request.POST.get('patientid'))
+                patientid = int(request.POST.get('patientid'))
+                patient = Patient.objects.get(patientID=patientid)
+                patient.delete()
 
             return HttpResponseRedirect(reverse('dashboard'))
 
