@@ -4,17 +4,38 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="{% static 'css/login.css' %}">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	
+	<nav class="navbar navbar-expand-lg navbar-light bg-dark" style="padding-bottom: 5px; padding-top: 5px;">
+      <a class="navbar-brand" href="{% url 'home_page' %}"><button type="button" class="btn btn-dark" style="padding-top: 0px; padding-bottom: 0px; font-size: 25px">Home</button></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <div class="fadeIn first">
-      <h1 style="margin-top: 50px"><i class="fa fa-unlock-alt" aria-hidden="true"></i> Log In</h1>
-    </div>
-    <form method="post">
-      {% csrf_token %}
-      <input style="margin-top: 50px" type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
-      <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
-    </form>
-  </div>
-</div>
+      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+		  <li class="nav-item">
+			<a class="nav-link active" href="{% url 'home_page' %}"><button type="button" class="btn btn-dark" style="padding-top: 0px; padding-bottom: 0px; font-size: 20px">Contact</button></a>
+		  </li>
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+              <a class="nav-link active" href="{% url 'logout' %}"><button type="button" class="btn btn-dark" style="padding-top: 0px; padding-bottom: 0px; font-size: 20px">Log Out</button></a>
+            {% else %}
+              <a class="nav-link active" href="{% url 'login' %}"><button type="button" class="btn btn-dark" style="padding-top: 0px; padding-bottom: 0px; font-size: 20px">Log In</button></a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </nav>
+	<div class="wrapper fadeInDown" style="padding-top: 0px; margin-top: 0px">
+	  <div id="formContent">
+		<div class="fadeIn first">
+		  <h1 style="margin-top: 50px"><i class="fa fa-unlock-alt" aria-hidden="true"></i> Log In</h1>
+		</div>
+		<form method="post">
+		  {% csrf_token %}
+		  <input style="margin-top: 50px" type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
+		  <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
+		  <input type="submit" class="fadeIn fourth" value="Log In">
+		</form>
+	  </div>
+	</div>

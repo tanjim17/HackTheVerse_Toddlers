@@ -100,8 +100,24 @@ def dashboard(request):
     usertype, user = check_usertype(request)
 
     if usertype == 'doctor':
-        return HttpResponse("Doctor Dashboard")
+        return render(request, 'doctorDashboard.html')
+
     elif usertype == 'nurse':
-        return HttpResponse("Nurse Dashboard")
+        return render(request, 'nurseDashboard.html')
+
     elif usertype == 'reception':
-        return HttpResponse("Reception Dashboard")
+
+        if request.method == 'POST':
+            formIdentity = request.POST.get('formIdentity')
+
+            if formIdentity == 'register':
+                name = request.POST.get('patientname')
+                age = int(request.POST.get('patientage'))
+                gender = request.POST.get('patientgender')
+                
+            elif formIdentity == 'discharge':
+                age = int(request.POST.get('patientid'))
+
+            return HttpResponseRedirect(reverse('dashboard'))
+
+        return render(request, 'receptionDashboard.html')

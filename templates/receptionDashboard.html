@@ -1,0 +1,63 @@
+{% extends "home.html" %}
+
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Reception DashBoard</h1>
+  </div>
+</div>
+<div class="container">
+  <div class="d-flex justify-content-center">
+    <button data-toggle="modal" data-target="#admissionModal" type="button" class="btn btn-success" style="margin-right: 10px; font-size: 20px; padding: 10px">Register New Patient</button>
+    <button data-toggle="modal" data-target="#releaseModal" type="button" class="btn btn-warning" style="margin-left: 10px; font-size: 20px; padding: 10px">Discharge Patient</button>
+  </div>
+</div>
+<div class="modal fade" id="admissionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-header" style="background-color: #292b2c">
+          <h5 class="modal-title" id="exampleModalLabel" style="color: white">Admit Patient</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input required style="margin-bottom: 10px" type="text" class="form-control" name="patientname" placeholder="Patient Name" aria-label="Username" aria-describedby="basic-addon1">
+          <input required min="1" style="margin-bottom: 10px" type="number" class="form-control" name="patientage" placeholder="Patient Age" aria-label="Username" aria-describedby="basic-addon1">
+          <input required type="text" class="form-control" name="patientgender" placeholder="Patient Gender (Male/Female)" aria-label="Username" aria-describedby="basic-addon1">
+          <input type="hidden" id="formIdentity1" name="formIdentity" value="register">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="releaseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-header" style="background-color: #292b2c">
+          <h5 class="modal-title" id="exampleModalLabel" style="color: white">Discharge Patient</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input required style="margin-bottom: 10px" type="number" class="form-control" name="patientid" placeholder="Patient ID" aria-label="Username" aria-describedby="basic-addon1">
+          <input type="hidden" id="formIdentity2" name="formIdentity" value="discharge">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{%endblock%}
