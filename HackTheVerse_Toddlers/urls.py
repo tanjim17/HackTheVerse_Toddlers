@@ -25,9 +25,6 @@ urlpatterns = [
     path('logout/', hcw_views.logout_view, name='logout'),
     path('dashboard', hcw_views.dashboard, name='dashboard'),
     path('patient/<int:patient_id>' , hcw_views.patient_details , name='patientdetails'),
-<<<<<<< HEAD
     path('update_patient_details/', hcw_views.update_patient_details , name='update_patient_details'),
-=======
     path('runthread/', pat_views.run_consumer_thread, name='consumer-thread')
->>>>>>> 906153d641bcf55ede7dbfceb13a54cf01557402
 ]
