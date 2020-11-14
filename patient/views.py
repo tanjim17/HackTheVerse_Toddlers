@@ -13,6 +13,7 @@ from django.utils import timezone
 import warnings
 import pytz
 from patient.analysis import condition_analyst
+import time
 
 def check_usertype(request):
     if request.user.is_authenticated:
@@ -55,6 +56,7 @@ def consumerUtil():
         bed = Bed.objects.get(bedID=bed_id)
 
         recentData = RecentMedicalData.objects.create(bed=bed, heartrate=heartrate, sys_bp=sys_bp, dia_bp=dia_bp, body_temp=body_temp, oxygen_level=oxygen_level, breathing_rate=breathing_rate, timestamp=dt_obj)
+        time.sleep(0.1)
 
         result = RecentMedicalData.objects.filter(bed=bed)
         if len(result)==11:
