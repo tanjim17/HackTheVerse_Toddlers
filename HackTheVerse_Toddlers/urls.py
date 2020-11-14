@@ -24,4 +24,5 @@ urlpatterns = [
     path('logout/', hcw_views.logout_view, name='logout'),
     path('dashboard', hcw_views.dashboard, name='dashboard'),
     path('patient/<int:patient_id>' , hcw_views.patient_details , name='patientdetails'),
+    path('update_patient_details/', hcw_views.update_patient_details , name='update_patient_details'),
 ]

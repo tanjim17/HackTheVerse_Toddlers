@@ -1,14 +1,61 @@
 {% extends "home.html" %}
 {% block content %}
-
-    <h4>Name :{{ name }}</h4>
-    <h4>Age :{{ age }}</h4>
-    <h4>Admitted On :{{ admissionDate }}</h4>
-    <h3>Rcent Information </h3>
-    <h4>Oxygen Level : {{ recent.oxygen_level }}</h4>
-    <h4>Body Temperature : {{ recent.body_temp }}</h4>
+    <div class="text-center">
+    <h4>{{ name }}</h4>
+    <h6>Age : {{ age }}</h6>
+    <h6>Admitted On : {{ admissionDate }}</h6>
+        <br><br>
+    <h3>Recent Information </h3>
+        <table class="table" id="table">
+          <thead>
+            <tr>
+              <th scope="col">TimeStamp</th>
+              <th scope="col">Heart Rate</th>
+              <th scope="col">Body Temperature</th>
+              <th scope="col">Oxygen Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for recent in recents %}
+            <tr>
+              <th scope="row">{{ recent.0 }}</th>
+              <td>{{ recent.1 }}</td>
+              <td>{{ recent.2 }}</td>
+              <td>{{ recent.3 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    <br><br>
     <h3>Previous History :</h3>
     <h4>Oxygen Level : {{ historical.oxygen_level }}</h4>
     <h4>Body Temperature : {{ historical.body_temp }}</h4>
+    </div>
+    <script>
+        var timer = setInterval(function() {
+            $.ajax(
+        {
+            type:"GET",
+            url: '{% url 'update_patient_details'%}',
+            data:{
+                'patient_id': '{{ patientID }}',
+            },
+            dataType: 'json',
+            success: function( data )
+            {
+                var recents = data['recents'];
+                var tbody = $('#table tbody');
+                tbody.empty();
+                for(var i=0; i< recents.length; i++){
+                    tbody.append('<tr><td>'+recents[i][0]+'</td>'+
+                        '<td>'+recents[i][1]+'</td>'+
+                        '<td>'+recents[i][2]+'</td>'+
+                        '<td>'+recents[i][3]+'</td><tr>');
+                }
+            }
+         });
+        }, 5000);
 
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 {% endblock %}

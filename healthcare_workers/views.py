@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from .models import Doctor, Nurse, Reception, Bed
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -107,10 +107,22 @@ def patient_details(request , patient_id):
     if usertype == 'doctor' or usertype == 'nurse':
         p_obj = Patient.objects.get( patientID = patient_id).__dict__
         bedid = p_obj['bed_id']
-        print(bedid)
-        p_obj['recent'] = RecentMedicalData.objects.get(bed_id = bedid).__dict__
         p_obj['historical'] = HistoricalMedicalData.objects.get(bed_id=bedid).__dict__
         return render(request, 'patientdetails.html' , p_obj)
+    elif usertype == 'reception':
+        return HttpResponseRedirect(reverse('dashboard'))
+
+@login_required
+def update_patient_details(request):
+    usertype, user = check_usertype(request)
+    patient_id = request.GET['patient_id']
+    if usertype == 'doctor' or usertype == 'nurse':
+        bedid = Patient.objects.get(patientID=patient_id).bed
+        r_objs = RecentMedicalData.objects.all().filter(bed_id=bedid)
+        recents = []
+        for r_obj in r_objs:
+            recents.append([r_obj.timestamp, r_obj.heartrate, r_obj.body_temp, r_obj.oxygen_level])
+        return JsonResponse({'recents': recents})
     elif usertype == 'reception':
         return HttpResponseRedirect(reverse('dashboard'))
 
@@ -167,3 +179,5 @@ def dashboard(request):
             return HttpResponseRedirect(reverse('dashboard'))
 
         return render(request, 'receptionDashboard.html')
+
+
