@@ -44,3 +44,25 @@ class Bed(models.Model):
 
     def __str__(self):
         return 'Bed : ' + str(self.bedID)
+
+class RecentMedicalData(models.Model):
+    bed = models.ForeignKey(Bed, on_delete=models.DO_NOTHING)
+
+    heartrate = models.IntegerField(null=True, blank=True)
+    sys_bp = models.IntegerField(null=True, blank=True)
+    dia_bp = models.IntegerField(null=True, blank=True)
+    body_temp = models.FloatField(null=True, blank=True)
+    oxygen_level = models.FloatField(null=True, blank=True)
+    breathing_rate = models.FloatField(null=True, blank=True)
+    timestamp = models.DateField(null=False)
+
+class HistoricalMedicalData(models.Model):
+    bed = models.ForeignKey(Bed, on_delete=models.DO_NOTHING)
+
+    heartrate = models.IntegerField(null=True, blank=True)
+    sys_bp = models.IntegerField(null=True, blank=True)
+    dia_bp = models.IntegerField(null=True, blank=True)
+    body_temp = models.FloatField(null=True, blank=True)
+    oxygen_level = models.FloatField(null=True, blank=True)
+    breathing_rate = models.FloatField(null=True, blank=True)
+    timestamp = models.DateField(null=False)

@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from patient.models import *
 import datetime
+import random
 
 def check_usertype(request):
     if request.user.is_authenticated:
@@ -16,6 +17,8 @@ def check_usertype(request):
             return 'nurse', Nurse.objects.get(user=request.user.id)
         elif Reception.objects.filter(user=request.user.id).exists():
             return 'reception', Reception.objects.get(user=request.user.id)
+        else:
+            return 'admin', ' '
     else:
         return ' ', ' '
 
@@ -40,6 +43,7 @@ def login_view(request):
 
         return render(request, 'login.html')
     return HttpResponseRedirect(reverse('home_page'))
+
 
 def populate():
     return
@@ -91,6 +95,7 @@ def populate():
     #     reception = Reception.objects.create(receptionID=receptionID, user=user, name=name)
     #     reception.save()
 
+
 @login_required
 def logout_view(request):
     logout(request)
@@ -101,7 +106,10 @@ def patient_details(request , patient_id):
     usertype, user = check_usertype(request)
     if usertype == 'doctor' or usertype == 'nurse':
         p_obj = Patient.objects.get( patientID = patient_id).__dict__
-
+        bedid = p_obj['bed_id']
+        print(bedid)
+        p_obj['recent'] = RecentMedicalData.objects.get(bed_id = bedid).__dict__
+        p_obj['historical'] = HistoricalMedicalData.objects.get(bed_id=bedid).__dict__
         return render(request, 'patientdetails.html' , p_obj)
     elif usertype == 'reception':
         return HttpResponseRedirect(reverse('dashboard'))
