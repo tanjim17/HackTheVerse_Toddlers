@@ -101,15 +101,26 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('home_page'))
 
+def bp_graph():
+    x = np.arange(1, 31)
+    y = []
+    for i in range(1, 31):
+        y.append(random.randint(98, 104))
+    return x, y
 @login_required
 def patient_details(request , patient_id):
     usertype, user = check_usertype(request)
     if usertype == 'doctor' or usertype == 'nurse':
         p_obj = Patient.objects.get( patientID = patient_id).__dict__
         bedid = p_obj['bed_id']
-        print(bedid)
+
+
         p_obj['recent'] = RecentMedicalData.objects.get(bed_id = bedid).__dict__
         p_obj['historical'] = HistoricalMedicalData.objects.get(bed_id=bedid).__dict__
+
+        p_obj['body_temp_graph'] =  temp_graph()
+        p_obj['bp_graph'] = bp_graph()
+
         return render(request, 'patientdetails.html' , p_obj)
     elif usertype == 'reception':
         return HttpResponseRedirect(reverse('dashboard'))
@@ -167,3 +178,72 @@ def dashboard(request):
             return HttpResponseRedirect(reverse('dashboard'))
 
         return render(request, 'receptionDashboard.html')
+
+import matplotlib.pyplot as plt
+from io import StringIO
+import numpy as np
+
+def temp_graph():
+    x = np.arange(1, 31)
+    y = []
+    for i in range(1, 31):
+        y.append(random.randint(98, 104))
+
+    fig, ax1 = plt.subplots(figsize = (12,5))
+    ax1.plot(x, y, lw=2, color="red")
+    plt.title('Change in body temperature(^oC) over the last month',
+              fontsize=14, fontweight='bold')
+    ax1.set_ylabel(r"Body Tempeature $(^oC)$", fontsize=12, color="blue")
+    for label in ax1.get_yticklabels():
+        label.set_color("green")
+    for label in ax1.get_xticklabels():
+        label.set_color("green")
+
+    imgdata = StringIO()
+    fig.savefig(imgdata, format='svg')
+    imgdata.seek(0)
+
+    data = imgdata.getvalue()
+    return data
+
+
+def bp_graph():
+    x = np.arange(1, 31)
+    ysys = []
+    ydia = []
+    for i in range(1, 31):
+        ysys.append(random.randint(110, 180))
+
+    for i in range(1, 31):
+        ydia.append(random.randint(50 , 105))
+
+    fig, ax1 = plt.subplots(figsize = (12,5))
+    ax1.plot(x, ysys, lw=2, color="blue")
+    plt.title('Change in BP over the last month',
+              fontsize=14, fontweight='bold')
+    ax1.set_ylabel(r"Systolic BP", fontsize=12, color="blue")
+    for label in ax1.get_yticklabels():
+        label.set_color("green")
+    for label in ax1.get_xticklabels():
+        label.set_color("green")
+
+    ax2 = ax1.twinx()
+    ax2.plot(x, ydia, lw=2, color="red")
+    ax2.set_ylabel(r"Diastolic BP", fontsize=12, color="red")
+    for label in ax2.get_yticklabels():
+        label.set_color("red")
+
+    imgdata = StringIO()
+    fig.savefig(imgdata, format='svg')
+    imgdata.seek(0)
+
+    data = imgdata.getvalue()
+    return data
+
+
+"""
+    fig = plt.figure(figsize=(12,5))
+    plt.title('Change in body temperature(^oC) over the last month',
+              fontsize=14, fontweight='bold')
+    plt.plot(x,y)
+    """

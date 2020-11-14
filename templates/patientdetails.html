@@ -11,4 +11,7 @@
     <h4>Oxygen Level : {{ historical.oxygen_level }}</h4>
     <h4>Body Temperature : {{ historical.body_temp }}</h4>
 
+    {{ body_temp_graph|safe }}
+    {{ bp_graph|safe }}
+
 {% endblock %}
