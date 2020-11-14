@@ -5,9 +5,9 @@
 <h2>List Of Patients</h2>
 
     <ul class="list-group">
-        {% for a , b in patients %}
+        {% for patient in allpatients %}
             <li class="list-group-item"><h6>
-    <a class="txt2" href={% url 'patientdetails' a%}>{{ forloop.counter }}. {{ b }}</a><br>
+    <a class="txt2" href={% url 'patientdetails' patient.0%}>{{ forloop.counter }}. {{ patient.1 }}</a><br>
             </h6></li>
     {% endfor %}
     </ul>
