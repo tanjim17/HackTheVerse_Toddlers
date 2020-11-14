@@ -50,7 +50,7 @@ def dashboard(request):
 
     if usertype == 'doctor':
         all_patients=[]
-        for p in Patient.objects.all():
+        for p in Patient.objects.all().filter(bed_id=bedid):
             all_patients.append(p.__dict__)
         dict={}
         ids = [x['patientID'] for x in all_patients]
