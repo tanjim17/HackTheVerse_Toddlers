@@ -54,7 +54,7 @@ class RecentMedicalData(models.Model):
     body_temp = models.FloatField(null=True, blank=True)
     oxygen_level = models.FloatField(null=True, blank=True)
     breathing_rate = models.FloatField(null=True, blank=True)
-    timestamp = models.DateField(null=False)
+    timestamp = models.DateTimeField(null=False)
 
 class HistoricalMedicalData(models.Model):
     bed = models.ForeignKey(Bed, on_delete=models.DO_NOTHING)
@@ -65,4 +65,4 @@ class HistoricalMedicalData(models.Model):
     body_temp = models.FloatField(null=True, blank=True)
     oxygen_level = models.FloatField(null=True, blank=True)
     breathing_rate = models.FloatField(null=True, blank=True)
-    timestamp = models.DateField(null=False)
+    timestamp = models.DateTimeField(null=False)

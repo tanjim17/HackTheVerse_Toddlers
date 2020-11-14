@@ -23,7 +23,7 @@ urlpatterns = [
     path('', hcw_views.home_page, name='home_page'),
     path('login/', hcw_views.login_view, name='login'),
     path('logout/', hcw_views.logout_view, name='logout'),
-    path('dashboard', hcw_views.dashboard, name='dashboard'),
+    path('dashboard/', hcw_views.dashboard, name='dashboard'),
     path('patient/<int:patient_id>' , hcw_views.patient_details , name='patientdetails'),
-    path('runthread/', pat_views.run_consumer_thread, name='consumer-thread')
+    path('fetchdata/', pat_views.run_consumer_thread, name='consumer-thread')
 ]
