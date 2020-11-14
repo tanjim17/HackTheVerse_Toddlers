@@ -12,6 +12,7 @@ from django.shortcuts import reverse
 from django.utils import timezone
 import warnings
 import pytz
+from patient.analysis import condition_analyst
 
 def check_usertype(request):
     if request.user.is_authenticated:
@@ -25,6 +26,13 @@ def check_usertype(request):
             return 'admin', ' '
     else:
         return ' ', ' '
+
+def doctor_nurse(bed_id):
+    bed_id = int(bed_id)
+    doctorID = Bed.objects.get(bedID=bed_id).doctor_fk.doctorID
+    nurseID = Bed.objects.get(bedID=bed_id).nurse_fk.nurseID
+
+    return doctorID, nurseID
 
 def consumerUtil():
     warnings.filterwarnings("ignore", category=RuntimeWarning)
@@ -41,6 +49,8 @@ def consumerUtil():
         breathing_rate = int(msg.value['breathing_rate'])
         timestamp = msg.timestamp/1000
         dt_obj = datetime.fromtimestamp(timestamp)
+
+        condition_analyst(bed_id, heartrate, sys_bp, dia_bp, body_temp, oxygen_level, breathing_rate)
 
         bed = Bed.objects.get(bedID=bed_id)
 
