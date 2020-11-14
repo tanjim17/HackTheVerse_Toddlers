@@ -123,5 +123,5 @@ if __name__ == '__main__':
             init_data_list[i] = condition
             #print(sensor_data)
             producer.send("SensorData", sensor_data)
-            time.sleep(3)
-        time.sleep(300)
+            time.sleep(0.1)
+        time.sleep(30)
