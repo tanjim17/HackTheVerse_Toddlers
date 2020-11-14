@@ -1,1 +1,15 @@
 {% extends "home.html" %}
+{% block content %}
+    <div class="container">
+    <div class="text-center">
+<h2>List Of Patients</h2>
+
+    <ul class="list-group">
+        {% for patient in allpatients %}
+            <li class="list-group-item"><h6>
+    <a class="txt2" href={% url 'patientdetails' patient.0%}>{{ forloop.counter }}. {{ patient.1 }}</a><br>
+            </h6></li>
+    {% endfor %}
+    </ul>
+    </div></div>
+{% endblock %}

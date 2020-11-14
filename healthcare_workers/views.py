@@ -49,6 +49,7 @@ def dashboard(request):
     usertype, user = check_usertype(request)
 
     if usertype == 'doctor':
+
         beds = Bed.objects.all().filter(doctor_fk=Doctor.objects.get(user=request.user.id))
         allpatients = []
         for bed in beds:
@@ -58,7 +59,13 @@ def dashboard(request):
         return render(request, 'doctorDashboard.html', {'allpatients': allpatients})
 
     elif usertype == 'nurse':
-        return render(request, 'nurseDashboard.html')
+        beds = Bed.objects.all().filter(nurse_fk=Nurse.objects.get(user=request.user.id))
+        allpatients = []
+        for bed in beds:
+            patients = Patient.objects.all().filter(bed=bed)
+            for patient in patients:
+                allpatients.append([patient.patientID, patient.name])
+        return render(request, 'nurseDashboard.html', {'allpatients': allpatients})
 
     elif usertype == 'reception':
 
@@ -173,7 +180,8 @@ def patient_details(request , patient_id):
         "p_obj['recent'] = RecentMedicalData.objects.get(bed_id = bedid).__dict__"
         #p_obj['historical'] = HistoricalMedicalData.objects.get(bed_id=bedid).__dict__
 
-        p_obj['body_temp_graph'] =  temp_graph()
+
+        p_obj['body_temp_graph'] =  temp_graph(patient_id)
         p_obj['bp_graph'] = bp_graph()
 
         return render(request, 'patientdetails.html' , p_obj)
@@ -199,7 +207,17 @@ import matplotlib.pyplot as plt
 from io import StringIO
 import numpy as np
 
-def temp_graph():
+def temp_graph(patient_id):
+    ## If you use actual data for graph plotting
+    """
+    bedid = Patient.objects.get(patientID=patient_id).bed
+    h_objs = HistoricalMedicalData.objects.all().filter(bed_id=bedid)
+    y = []
+    for hob in h_objs:
+        y.append(hob.body_temp)
+    x = np.arange(1, len(y)+1)
+    """
+    ## If you use dummy data for generating the graph
     x = np.arange(1, 31)
     y = []
     for i in range(1, 31):
@@ -207,7 +225,7 @@ def temp_graph():
 
     fig, ax1 = plt.subplots(figsize = (12,5))
     ax1.plot(x, y, lw=2, color="red")
-    plt.title('Change in body temperature(^oC) over the last month',
+    plt.title('Change in body temperature(^oC) over the last few days',
               fontsize=14, fontweight='bold')
     ax1.set_ylabel(r"Body Tempeature $(^oC)$", fontsize=12, color="blue")
     for label in ax1.get_yticklabels():
@@ -224,6 +242,18 @@ def temp_graph():
 
 
 def bp_graph():
+    ## If you use actual data for graph plotting
+    """
+    bedid = Patient.objects.get(patientID=patient_id).bed
+    h_objs = HistoricalMedicalData.objects.all().filter(bed_id=bedid)
+    y = []
+    for hob in h_objs:
+        y1.append(hob.sys_bp)
+        y2.append(hob.dia_bp)
+    x = np.arange(1, len(y)+1)
+
+    """
+    ## If you use dummy data for generating the graph
     x = np.arange(1, 31)
     ysys = []
     ydia = []
@@ -235,7 +265,7 @@ def bp_graph():
 
     fig, ax1 = plt.subplots(figsize = (12,5))
     ax1.plot(x, ysys, lw=2, color="blue")
-    plt.title('Change in BP over the last month',
+    plt.title('Change in BP over the last few days',
               fontsize=14, fontweight='bold')
     ax1.set_ylabel(r"Systolic BP", fontsize=12, color="blue")
     for label in ax1.get_yticklabels():
