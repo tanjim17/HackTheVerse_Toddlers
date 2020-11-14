@@ -12,6 +12,7 @@ def doctor_nurse(bed_id):
 
 
 def send_emergency_data(bed_id, score):
+    print('function called')
     producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
                              value_serializer=lambda m: json.dumps(m).encode('utf-8'),
                              api_version=(0, 10, 1))
@@ -40,7 +41,7 @@ def score_calculator(heartbeat, sys_bp, dia_bp, body_temp, oxygen_level, breathi
 
 def condition_analyst(bed_id, heartbeat, sys_bp, dia_bp, body_temp, oxygen_level, breathing_rate):
     score = score_calculator(heartbeat, sys_bp, dia_bp, body_temp, oxygen_level, breathing_rate)
-    print(score)
+
     if score >= 3:
         last_five = RecentMedicalData.objects.all().filter(bed_id=bed_id).order_by('-id')[:5]
         list_hrate = []
@@ -63,6 +64,7 @@ def condition_analyst(bed_id, heartbeat, sys_bp, dia_bp, body_temp, oxygen_level
         avg_oxy_level = sum(list_olevel)/5
         avg_brate = sum(list_brate)/5
         score_avg = score_calculator(avg_hrate, avg_sys_bp, avg_dia_bp, avg_body_temp, avg_oxy_level, avg_brate)
+        print(score_avg)
         if score_avg >= 3.5:
             total_score = (score_avg + score)/2
             send_emergency_data(bed_id, total_score)
