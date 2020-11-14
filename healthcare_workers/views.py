@@ -164,12 +164,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('home_page'))
 
-def bp_graph():
-    x = np.arange(1, 31)
-    y = []
-    for i in range(1, 31):
-        y.append(random.randint(98, 104))
-    return x, y
+
 @login_required
 def patient_details(request , patient_id):
     usertype, user = check_usertype(request)
@@ -177,7 +172,7 @@ def patient_details(request , patient_id):
         p_obj = Patient.objects.get( patientID = patient_id).__dict__
         bedid = p_obj['bed_id']
 
-        p_obj['recent'] = RecentMedicalData.objects.get(bed_id = bedid).__dict__
+        "p_obj['recent'] = RecentMedicalData.objects.get(bed_id = bedid).__dict__"
         p_obj['historical'] = HistoricalMedicalData.objects.get(bed_id=bedid).__dict__
 
         p_obj['body_temp_graph'] =  temp_graph()
