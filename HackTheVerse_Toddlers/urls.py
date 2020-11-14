@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from healthcare_workers import views as hcw_views
+from patient import views as pat_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +25,5 @@ urlpatterns = [
     path('logout/', hcw_views.logout_view, name='logout'),
     path('dashboard', hcw_views.dashboard, name='dashboard'),
     path('patient/<int:patient_id>' , hcw_views.patient_details , name='patientdetails'),
+    path('runthread/', pat_views.run_consumer_thread, name='consumer-thread')
 ]
