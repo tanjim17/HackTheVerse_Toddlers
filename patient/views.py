@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 # Create your views here.
 def func():
-
+    pass
     # bedID =
     # heartrate =
     # sys_bp =
