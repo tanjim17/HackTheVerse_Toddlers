@@ -173,7 +173,7 @@ def patient_details(request , patient_id):
         bedid = p_obj['bed_id']
 
         "p_obj['recent'] = RecentMedicalData.objects.get(bed_id = bedid).__dict__"
-        p_obj['historical'] = HistoricalMedicalData.objects.get(bed_id=bedid).__dict__
+        #p_obj['historical'] = HistoricalMedicalData.objects.get(bed_id=bedid).__dict__
 
         p_obj['body_temp_graph'] =  temp_graph()
         p_obj['bp_graph'] = bp_graph()
