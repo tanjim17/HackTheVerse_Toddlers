@@ -49,18 +49,23 @@ def dashboard(request):
     usertype, user = check_usertype(request)
 
     if usertype == 'doctor':
-        all_patients=[]
-        for p in Patient.objects.all().filter(bed_id=bedid):
-            all_patients.append(p.__dict__)
-        dict={}
-        ids = [x['patientID'] for x in all_patients]
-        names = [x['name'] for x in all_patients]
-        dict['patients'] = [(x[0], x[1]) for x in zip(ids , names)]
-        print(dict['patients'])
-        return render(request, 'doctorDashboard.html' , dict)
+
+        beds = Bed.objects.all().filter(doctor_fk=Doctor.objects.get(user=request.user.id))
+        allpatients = []
+        for bed in beds:
+            patients = Patient.objects.all().filter(bed=bed)
+            for patient in patients:
+                allpatients.append([patient.patientID, patient.name])
+        return render(request, 'doctorDashboard.html', {'allpatients': allpatients})
 
     elif usertype == 'nurse':
-        return render(request, 'nurseDashboard.html')
+        beds = Bed.objects.all().filter(nurse_fk=Nurse.objects.get(user=request.user.id))
+        allpatients = []
+        for bed in beds:
+            patients = Patient.objects.all().filter(bed=bed)
+            for patient in patients:
+                allpatients.append([patient.patientID, patient.name])
+        return render(request, 'nurseDashboard.html', {'allpatients': allpatients})
 
     elif usertype == 'reception':
 
