@@ -23,4 +23,5 @@ urlpatterns = [
     path('login/', hcw_views.login_view, name='login'),
     path('logout/', hcw_views.logout_view, name='logout'),
     path('dashboard', hcw_views.dashboard, name='dashboard'),
+    path('patient/<int:patient_id>' , hcw_views.patient_details , name='patientdetails'),
 ]

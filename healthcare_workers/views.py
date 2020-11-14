@@ -97,12 +97,30 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('home_page'))
 
 @login_required
+def patient_details(request , patient_id):
+    usertype, user = check_usertype(request)
+    if usertype == 'doctor' or usertype == 'nurse':
+        p_obj = Patient.objects.get( patientID = patient_id).__dict__
+
+        return render(request, 'patientdetails.html' , p_obj)
+    elif usertype == 'reception':
+        return HttpResponseRedirect(reverse('dashboard'))
+
+@login_required
 def dashboard(request):
 
     usertype, user = check_usertype(request)
 
     if usertype == 'doctor':
-        return render(request, 'doctorDashboard.html')
+        all_patients=[]
+        for p in Patient.objects.all():
+            all_patients.append(p.__dict__)
+        dict={}
+        ids = [x['patientID'] for x in all_patients]
+        names = [x['name'] for x in all_patients]
+        dict['patients'] = [(x[0], x[1]) for x in zip(ids , names)]
+        print(dict['patients'])
+        return render(request, 'doctorDashboard.html' , dict)
 
     elif usertype == 'nurse':
         return render(request, 'nurseDashboard.html')
