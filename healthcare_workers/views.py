@@ -75,6 +75,9 @@ def dashboard(request):
                 for i in Patient.objects.all():
                     beds_taken.append(i.bed.bedID)
                     patientIDs.append(i.patientID)
+
+                for i in PreviousPatient.objects.all():
+                    patientIDs.append(i.patientID)
                 patientIDs.sort(reverse=True)
 
                 available_beds = []
@@ -94,6 +97,8 @@ def dashboard(request):
             elif formIdentity == 'discharge':
                 patientid = int(request.POST.get('patientid'))
                 patient = Patient.objects.get(patientID=patientid)
+                previousPatient = PreviousPatient.objects.create(patientID=patient.patientID, gender=patient.gender, age=patient.age, name=patient.name, admissionDate=patient.admissionDate, bed=patient.bed, releaseData=datetime.datetime.now())
+                previousPatient.save()
                 patient.delete()
 
             return HttpResponseRedirect(reverse('dashboard'))
