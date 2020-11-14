@@ -24,17 +24,17 @@ def send_emergency_data(bed_id, score):
 
 def score_calculator(heartbeat, sys_bp, dia_bp, body_temp, oxygen_level, breathing_rate):
     score = 0
-    if heartbeat > 93.0 or heartbeat < 55.0:
+    if heartbeat > 85.0 or heartbeat < 65.0:
         score = score + 1
-    if sys_bp > 140.0 :
+    if sys_bp > 130.0 :
         score = score + 1
-    if dia_bp < 65.0 :
+    if dia_bp < 75.0 :
         score = score + 1
-    if body_temp < 97.0 or body_temp > 103.0:
+    if body_temp < 97.0 or body_temp > 101.0:
         score = score + 1
-    if oxygen_level < 0.88:
+    if oxygen_level < 0.92:
         score = score + 1
-    if breathing_rate > 17.0 or breathing_rate < 13.0:
+    if breathing_rate > 16.0 or breathing_rate < 13.0:
         score = score + 1
     return score
 
