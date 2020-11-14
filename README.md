@@ -38,10 +38,10 @@ Streaming Server : Apache kafka
     ```
 4. After installing necessary libraries, run ```python manage.py runserver``` and go to the URl ```http://127.0.0.1:8000/fetchdata/``` to start the consumer thread of kafka
 <b>If you want administrator access</b>
-```
-user name: Toddlers<br>
-password: srelddot17<br>
-```
+    ```
+    user name: Toddlers<br>
+    password: srelddot17<br>
+    ```
 <p>
 If you want to log in as doctor/nurse/receptionist, get the username from administrator page and password is 1234
 </p>
