@@ -1,1 +1,9 @@
 {% extends "home.html" %}
+{% block content %}
+<h2>List Of Patients</h2>
+
+{% for a , b in patients %}
+    {{ forloop.counter }} <a class="txt2" href={% url 'patientdetails' a %}>{{ b }}</a><br>
+{% endfor %}
+
+{% endblock %}

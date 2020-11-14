@@ -158,33 +158,75 @@ def populate():
     #     reception = Reception.objects.create(receptionID=receptionID, user=user, name=name)
     #     reception.save()
 
-    # Populate with Patients
-    # for j in range(90):
-    #     name = 'Patient' + str(j)
-    #     age = random.randint(1, 80)
-    #     gender = random.randint(0, 1)
-    #     if gender == 0:
-    #         gender = 'Male'
-    #     else:
-    #         gender = 'Female'
-    #
-    #     beds_taken = []
-    #     patientIDs = []
-    #     for i in Patient.objects.all():
-    #         beds_taken.append(i.bed.bedID)
-    #         patientIDs.append(i.patientID)
-    #     patientIDs.sort(reverse=True)
-    #
-    #     available_beds = []
-    #     for i in Bed.objects.all():
-    #         if i.bedID not in beds_taken:
-    #             available_beds.append(i.bedID)
-    #     available_beds.sort()
-    #
-    #     if len(available_beds)>0:
-    #         bed = Bed.objects.get(bedID=available_beds[0])
-    #         if len(patientIDs) == 0:
-    #             id = 1
-    #         else:
-    #             id = patientIDs[0]+1
-    #         patient = Patient.objects.create(age=age, name=name, gender=gender, admissionDate=datetime.datetime.now(), patientID=id, bed=bed)
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('home_page'))
+
+@login_required
+def patient_details(request , patient_id):
+    usertype, user = check_usertype(request)
+    if usertype == 'doctor' or usertype == 'nurse':
+        p_obj = Patient.objects.get( patientID = patient_id).__dict__
+        bedid = p_obj['bed_id']
+        print(bedid)
+        p_obj['recent'] = RecentMedicalData.objects.get(bed_id = bedid).__dict__
+        p_obj['historical'] = HistoricalMedicalData.objects.get(bed_id=bedid).__dict__
+        return render(request, 'patientdetails.html' , p_obj)
+    elif usertype == 'reception':
+        return HttpResponseRedirect(reverse('dashboard'))
+
+@login_required
+def dashboard(request):
+
+    usertype, user = check_usertype(request)
+
+    if usertype == 'doctor':
+        all_patients=[]
+        for p in Patient.objects.all():
+            all_patients.append(p.__dict__)
+        dict={}
+        ids = [x['patientID'] for x in all_patients]
+        names = [x['name'] for x in all_patients]
+        dict['patients'] = [(x[0], x[1]) for x in zip(ids , names)]
+        print(dict['patients'])
+        return render(request, 'doctorDashboard.html' , dict)
+
+    elif usertype == 'nurse':
+        return render(request, 'nurseDashboard.html')
+
+    elif usertype == 'reception':
+
+        if request.method == 'POST':
+            formIdentity = request.POST.get('formIdentity')
+
+            if formIdentity == 'register':
+                name = request.POST.get('patientname')
+                age = int(request.POST.get('patientage'))
+                gender = request.POST.get('patientgender')
+
+                beds_taken = []
+                patientIDs = []
+                for i in Patient.objects.all():
+                    beds_taken.append(i.bed.bedID)
+                    patientIDs.append(i.patientID)
+                patientIDs.sort(reverse=True)
+
+                available_beds = []
+                for i in Bed.objects.all():
+                    if i.bedID not in beds_taken:
+                        available_beds.append(i.bedID)
+
+                if len(available_beds)>0:
+                    bed = Bed.objects.get(bedID=available_beds[0])
+                    patient = Patient.objects.create(age=age, name=name, gender=gender, admissionDate=datetime.datetime.now(), patientID=patientIDs[0]+1, bed=bed)
+
+            elif formIdentity == 'discharge':
+                patientid = int(request.POST.get('patientid'))
+                patient = Patient.objects.get(patientID=patientid)
+                patient.delete()
+
+            return HttpResponseRedirect(reverse('dashboard'))
+
+        return render(request, 'receptionDashboard.html')
