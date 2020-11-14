@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from .models import Doctor, Nurse, Reception, Bed
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -44,6 +44,69 @@ def login_view(request):
         return render(request, 'login.html')
     return HttpResponseRedirect(reverse('home_page'))
 
+@login_required
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('home_page'))
+
+@login_required
+def dashboard(request):
+
+    usertype, user = check_usertype(request)
+
+    if usertype == 'doctor':
+        return render(request, 'doctorDashboard.html')
+
+    elif usertype == 'nurse':
+        return render(request, 'nurseDashboard.html')
+
+    elif usertype == 'reception':
+
+        if request.method == 'POST':
+            formIdentity = request.POST.get('formIdentity')
+
+            if formIdentity == 'register':
+                name = request.POST.get('patientname')
+                age = int(request.POST.get('patientage'))
+                gender = request.POST.get('patientgender')
+
+                beds_taken = []
+                patientIDs = []
+                for i in Patient.objects.all():
+                    beds_taken.append(i.bed.bedID)
+                    patientIDs.append(i.patientID)
+
+                for i in PreviousPatient.objects.all():
+                    patientIDs.append(i.patientID)
+                patientIDs.sort(reverse=True)
+
+                available_beds = []
+                for i in Bed.objects.all():
+                    if i.bedID not in beds_taken:
+                        available_beds.append(i.bedID)
+                available_beds.sort()
+
+                if len(available_beds)>0:
+                    bed = Bed.objects.get(bedID=available_beds[0])
+                    if len(patientIDs) == 0:
+                        id = 1
+                    else:
+                        id = patientIDs[0]+1
+                    patient = Patient.objects.create(age=age, name=name, gender=gender, admissionDate=datetime.datetime.now(), patientID=id, bed=bed)
+
+            elif formIdentity == 'discharge':
+                patientid = int(request.POST.get('patientid'))
+                patient = Patient.objects.get(patientID=patientid)
+                previousPatient = PreviousPatient.objects.create(patientID=patient.patientID, gender=patient.gender, age=patient.age, name=patient.name, admissionDate=patient.admissionDate, bed=patient.bed, releaseData=datetime.datetime.now())
+                previousPatient.save()
+                patient.delete()
+
+            return HttpResponseRedirect(reverse('dashboard'))
+
+    elif usertype == 'admin':
+        return HttpResponseRedirect('http://{}/admin'.format(request.META['HTTP_HOST']))
+
+    return render(request, 'receptionDashboard.html')
 
 def populate():
     return
@@ -114,7 +177,6 @@ def patient_details(request , patient_id):
         p_obj = Patient.objects.get( patientID = patient_id).__dict__
         bedid = p_obj['bed_id']
 
-
         p_obj['recent'] = RecentMedicalData.objects.get(bed_id = bedid).__dict__
         p_obj['historical'] = HistoricalMedicalData.objects.get(bed_id=bedid).__dict__
 
@@ -122,6 +184,20 @@ def patient_details(request , patient_id):
         p_obj['bp_graph'] = bp_graph()
 
         return render(request, 'patientdetails.html' , p_obj)
+    elif usertype == 'reception':
+        return HttpResponseRedirect(reverse('dashboard'))
+
+@login_required
+def update_patient_details(request):
+    usertype, user = check_usertype(request)
+    patient_id = request.GET['patient_id']
+    if usertype == 'doctor' or usertype == 'nurse':
+        bedid = Patient.objects.get(patientID=patient_id).bed
+        r_objs = RecentMedicalData.objects.all().filter(bed_id=bedid)
+        recents = []
+        for r_obj in r_objs:
+            recents.append([r_obj.timestamp, r_obj.heartrate, r_obj.body_temp, r_obj.oxygen_level])
+        return JsonResponse({'recents': recents})
     elif usertype == 'reception':
         return HttpResponseRedirect(reverse('dashboard'))
 
@@ -178,6 +254,7 @@ def dashboard(request):
             return HttpResponseRedirect(reverse('dashboard'))
 
         return render(request, 'receptionDashboard.html')
+
 
 import matplotlib.pyplot as plt
 from io import StringIO
@@ -246,4 +323,4 @@ def bp_graph():
     plt.title('Change in body temperature(^oC) over the last month',
               fontsize=14, fontweight='bold')
     plt.plot(x,y)
-    """
+"""
