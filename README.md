@@ -5,15 +5,17 @@
 
 <p>This hackathon aims to Provide communication/analysis generated from data streams in medical systems/sensors 
 <p>
-<h2>System Architecture Diagrams </h2>
+<h5>Use Case Diagram</h5>
+<img src="documentation/use case.png">
+
 <h5>Activity Diagram</h5>
 <img src="documentation/activity.png">
 
 <h5>Data Flow Diagram</h5>
 <img src="documentation/data flow.png">
 
-<h5>Use Case Diagram</h5>
-<img src="documentation/use case.png">
+<h5>Architecture Diagram</h5>
+<img src="documentation/architecture.png">
 
 To be very brief , our system is an automation of conducting medical activities online.Like a patient can directly communicate with Doctors/Nurses and take their guidances and keep himself monitored for any amount of time he wants.In case any emergency takes place , doctors/nurses will be notified for further action.Health datas have been streamed using ```Apache Kafka```.
 
@@ -49,6 +51,6 @@ If you want to log in as doctor/nurse/receptionist, get the username from admini
 <h3>Team Toddlers Members: </h3>
 <h4>1. <a href="https://github.com/NazmulTakbir">Nazmul Takbir</a></h4>
 <h4>2. <a href="https://github.com/AfnanCSE98">Sihat Afnan </a></h4>
-<h4>3. <a href="https://github.com/tanjim17">Tanjim Khan</a></h4>
-<h4>3. <a href="https://github.com/Jayanta47">Jayanta Sadhu</a></h4>
+<h4>3. <a href="https://github.com/tanjim17">Tanjim Ahmed Khan</a></h4>
+<h4>4. <a href="https://github.com/Jayanta47">Jayanta Sadhu</a></h4>
     
