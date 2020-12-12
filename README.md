@@ -4,7 +4,7 @@
 <img src="documentation/Problem_Statement.jpg" alt="drawing" height="550"/>
 
 ### Solution Summary
-* Download [this](https://github.com/NazmulTakbir/HackNsu2_TEAM_RETURN_ZERO/blob/master/Solution%20Idea%20Summary.pptx) power point presentation
+* Download [this](https://github.com/NazmulTakbir/HackTheVerse_Toddlers/blob/main/documentation/Solution%20Presentation.pptx) power point presentation
 
 ---
 
@@ -48,9 +48,12 @@ Streaming Server : Apache kafka
     ```
 * If you want to log in as doctor/nurse/receptionist, get the username from Django admin interface and password is 1234
 
-### Team Toddlers Members:
+### Team Toddlers Members
 * [Nazmul Takbir](https://github.com/NazmulTakbir)
 * [Sihat Afnan](https://github.com/AfnanCSE98)
 * [Tanjim Ahmed Khan](https://github.com/tanjim17)
 * [Jayanta Sadhu](https://github.com/Jayanta47)
-    
+
+### Hackathon Results
+We qualified for the final round as one of the top 7 teams from the initial 41 teams. Unfortunately, we did not succeed to be one of the top 3 prize winning teams. Nonetheless, it was a great learning experience.   
+<img src="documentation/Round_One_Result.png" alt="drawing" height="500"/>
