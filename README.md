@@ -1,21 +1,25 @@
-<h1>HackTheVerse Round 1(Health Domain)</h1>
-<img src = "documentation/logo.PNG">
+# HackTheVerse - Hackathon hosted by IIT, University Of Dhaka
 
-<h2> Hackathon hosted by IIT , University Of Dhaka </h2>
+### Problem Statement 
+<img src="documentation/Problem_Statement.jpg" alt="drawing" height="600"/>
 
-<p>This hackathon aims to Provide communication/analysis generated from data streams in medical systems/sensors 
-<p>
-<h5>Use Case Diagram</h5>
-<img src="documentation/use case.png">
+### Solution Summary
+* Download [this](https://github.com/NazmulTakbir/HackNsu2_TEAM_RETURN_ZERO/blob/master/Solution%20Idea%20Summary.pptx) power point presentation
 
-<h5>Activity Diagram</h5>
-<img src="documentation/activity.png">
+---
 
-<h5>Data Flow Diagram</h5>
-<img src="documentation/data flow.png">
+### Solution Design Diagrams
+* Use Case Diagram
+<img src="documentation/use case.png" alt="drawing" height="600"/>
 
-<h5>Architecture Diagram</h5>
-<img src="documentation/architecture.png">
+* Activity Diagram
+<img src="documentation/activity.png" alt="drawing" height="600"/>
+
+* Data Flow Diagram
+<img src="documentation/data flow.png" alt="drawing" height="600"/>
+
+* Architecture Diagram
+<img src="documentation/architecture.png" alt="drawing" height="600"/>
 
 To be very brief , our system is an automation of conducting medical activities online.Like a patient can directly communicate with Doctors/Nurses and take their guidances and keep himself monitored for any amount of time he wants.In case any emergency takes place , doctors/nurses will be notified for further action.Health datas have been streamed using ```Apache Kafka```.
 
